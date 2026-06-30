@@ -1,0 +1,23 @@
+table dim_coverage
+
+	column policy_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: policy_type
+
+	column line_of_business
+		dataType: string
+		summarizeBy: none
+		sourceColumn: line_of_business
+
+	column tail_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: tail_type
+
+	partition dim_coverage = entity
+		mode: directLake
+		source
+			entityName: dim_coverage
+			schemaName: gold
+			expressionSource: DL_Insurance

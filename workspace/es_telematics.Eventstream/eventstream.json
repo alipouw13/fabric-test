@@ -1,0 +1,49 @@
+{
+  "compatibilityLevel": "1.0",
+  "sources": [
+    {
+      "name": "TelematicsSampleSource",
+      "type": "SampleData",
+      "properties": {
+        "type": "Buses"
+      }
+    }
+  ],
+  "streams": [
+    {
+      "name": "TelematicsDefaultStream",
+      "type": "DefaultStream",
+      "properties": {},
+      "inputNodes": [
+        {
+          "name": "TelematicsSampleSource"
+        }
+      ]
+    }
+  ],
+  "operators": [],
+  "destinations": [
+    {
+      "name": "EhTelematicsRaw",
+      "type": "Eventhouse",
+      "properties": {
+        "dataIngestionMode": "ProcessedIngestion",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "itemId": "11111111-1111-1111-1111-000000000031",
+        "databaseName": "kqldb_insurance_realtime",
+        "tableName": "TelematicsStreamRaw",
+        "inputSerialization": {
+          "type": "Json",
+          "properties": {
+            "encoding": "UTF8"
+          }
+        }
+      },
+      "inputNodes": [
+        {
+          "name": "TelematicsDefaultStream"
+        }
+      ]
+    }
+  ]
+}

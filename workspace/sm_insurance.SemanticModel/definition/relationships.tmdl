@@ -1,0 +1,35 @@
+relationship claim_to_policy
+	fromColumn: fact_claim.policy_id
+	toColumn: dim_policy.policy_id
+
+relationship claim_to_customer
+	fromColumn: fact_claim.customer_id
+	toColumn: dim_customer.customer_id
+
+relationship claim_to_agent
+	fromColumn: fact_claim.agent_id
+	toColumn: dim_agent.agent_id
+
+relationship claim_to_date
+	fromColumn: fact_claim.date_key
+	toColumn: dim_date.date_key
+
+relationship premium_to_policy
+	fromColumn: fact_premium.policy_id
+	toColumn: dim_policy.policy_id
+
+relationship premium_to_customer
+	fromColumn: fact_premium.customer_id
+	toColumn: dim_customer.customer_id
+
+relationship premium_to_agent
+	fromColumn: fact_premium.agent_id
+	toColumn: dim_agent.agent_id
+
+relationship premium_to_date
+	fromColumn: fact_premium.date_key
+	toColumn: dim_date.date_key
+
+relationship policy_to_coverage
+	fromColumn: dim_policy.policy_type
+	toColumn: dim_coverage.policy_type

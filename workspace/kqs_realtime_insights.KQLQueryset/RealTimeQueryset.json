@@ -1,0 +1,39 @@
+{
+  "queryset": {
+    "version": "1.0.0",
+    "dataSources": [
+      {
+        "id": "aaaa0001-0000-0000-0000-000000000001",
+        "clusterUri": "https://PLACEHOLDER-EVENTHOUSE-QUERY-URI.kusto.fabric.microsoft.com",
+        "type": "AzureDataExplorer",
+        "databaseName": "kqldb_insurance_realtime"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "bbbb0001-0000-0000-0000-000000000001",
+        "title": "Driver risk (last hour)",
+        "dataSourceId": "aaaa0001-0000-0000-0000-000000000001",
+        "content": "DriverRiskScore(1h) | take 50"
+      },
+      {
+        "id": "bbbb0002-0000-0000-0000-000000000002",
+        "title": "Live fleet positions",
+        "dataSourceId": "aaaa0001-0000-0000-0000-000000000001",
+        "content": "LatestByDevice | project DeviceId, PolicyId, EventTime, SpeedMph, Latitude, Longitude | take 100"
+      },
+      {
+        "id": "bbbb0003-0000-0000-0000-000000000003",
+        "title": "Harsh-event hotspots",
+        "dataSourceId": "aaaa0001-0000-0000-0000-000000000001",
+        "content": "VehicleTelematics | where EventTime > ago(1h) | where HarshBrake or HarshAccel | summarize Events=count() by PolicyId | top 20 by Events desc"
+      },
+      {
+        "id": "bbbb0004-0000-0000-0000-000000000004",
+        "title": "Streaming sample feed (Eventstream)",
+        "dataSourceId": "aaaa0001-0000-0000-0000-000000000001",
+        "content": "TelematicsStreamRaw | summarize Events=count() by bin(Timestamp, 1m) | order by Timestamp desc | take 30"
+      }
+    ]
+  }
+}

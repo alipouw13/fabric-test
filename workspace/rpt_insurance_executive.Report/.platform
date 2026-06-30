@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "rpt_insurance_executive",
+    "description": "Contoso Insurance executive overview — loss ratio, premium, claims, and fraud, bound to sm_insurance."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "11111111-1111-1111-1111-000000000041"
+  }
+}

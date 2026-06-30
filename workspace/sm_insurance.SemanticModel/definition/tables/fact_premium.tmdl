@@ -1,0 +1,67 @@
+table fact_premium
+
+	/// Total earned premium across installments.
+	measure 'Earned Premium' = SUM(fact_premium[earned_premium])
+		formatString: \$#,##0
+
+	measure 'Premium Transactions' = COUNTROWS(fact_premium)
+		formatString: #,##0
+
+	column txn_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: txn_id
+
+	column policy_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: policy_id
+
+	column customer_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: customer_id
+
+	column agent_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: agent_id
+
+	column policy_type
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: policy_type
+
+	column date_key
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column txn_date
+		dataType: dateTime
+		formatString: Long Date
+		summarizeBy: none
+		sourceColumn: txn_date
+
+	column earned_premium
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: earned_premium
+
+	column payment_method
+		dataType: string
+		summarizeBy: none
+		sourceColumn: payment_method
+
+	partition fact_premium = entity
+		mode: directLake
+		source
+			entityName: fact_premium
+			schemaName: gold
+			expressionSource: DL_Insurance

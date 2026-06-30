@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Eventhouse",
+    "displayName": "eh_insurance_realtime",
+    "description": "Real-time Eventhouse for Contoso Insurance vehicle telematics (usage-based insurance signal)."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "11111111-1111-1111-1111-000000000030"
+  }
+}

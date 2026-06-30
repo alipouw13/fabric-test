@@ -1,0 +1,85 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "tableByRegion",
+  "position": { "x": 24, "y": 488, "z": 5, "width": 1232, "height": 216, "tabOrder": 5 },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": { "SourceRef": { "Entity": "dim_agent" } },
+                  "Property": "region"
+                }
+              },
+              "queryRef": "dim_agent.region",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": { "SourceRef": { "Entity": "fact_premium" } },
+                  "Property": "Earned Premium"
+                }
+              },
+              "queryRef": "fact_premium.Earned Premium"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": { "SourceRef": { "Entity": "fact_claim" } },
+                  "Property": "Net Incurred"
+                }
+              },
+              "queryRef": "fact_claim.Net Incurred"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": { "SourceRef": { "Entity": "fact_claim" } },
+                  "Property": "Claim Count"
+                }
+              },
+              "queryRef": "fact_claim.Claim Count"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": { "SourceRef": { "Entity": "fact_claim" } },
+                  "Property": "Loss Ratio"
+                }
+              },
+              "queryRef": "fact_claim.Loss Ratio"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": { "SourceRef": { "Entity": "fact_claim" } },
+                  "Property": "Fraud Rate"
+                }
+              },
+              "queryRef": "fact_claim.Fraud Rate"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": { "SourceRef": { "Entity": "fact_claim" } },
+                "Property": "Net Incurred"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

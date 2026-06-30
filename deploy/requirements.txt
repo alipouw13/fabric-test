@@ -1,0 +1,6 @@
+# fabric-cicd deployment dependencies for Contoso Insurance.
+# Pinned to a recent release that supports all item types used here
+# (KQLQueryset, Eventhouse $queryserviceuri attribute, _ALL_ env key,
+# byPath Report -> SemanticModel auto-binding).
+fabric-cicd>=1.0.0
+azure-identity>=1.17.0

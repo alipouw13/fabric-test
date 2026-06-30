@@ -1,0 +1,8 @@
+/// Direct Lake (OneLake) source for the lh_insurance gold layer.
+/// The OneLake workspace and lakehouse GUIDs are find-replaced per environment
+/// by fabric-cicd (see deploy/parameter.yml) — never hardcode real GUIDs here.
+expression DL_Insurance =
+		let
+			Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/PLACEHOLDER_WORKSPACE_ID/PLACEHOLDER_LAKEHOUSE_ID", [HierarchicalNavigation = true])
+		in
+			Source

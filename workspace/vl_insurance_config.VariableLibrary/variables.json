@@ -1,0 +1,35 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/variableLibrary/definition/variables/1.0.0/schema.json",
+  "variables": [
+    {
+      "name": "environment",
+      "note": "Logical environment label (dev/test/prod).",
+      "type": "String",
+      "value": "dev"
+    },
+    {
+      "name": "lakehouse_name",
+      "note": "Medallion lakehouse name.",
+      "type": "String",
+      "value": "lh_insurance"
+    },
+    {
+      "name": "warehouse_name",
+      "note": "Gold warehouse name (load target for nb_03_load_warehouse).",
+      "type": "String",
+      "value": "wh_insurance"
+    },
+    {
+      "name": "kql_database_name",
+      "note": "Real-time KQL database name.",
+      "type": "String",
+      "value": "kqldb_insurance_realtime"
+    },
+    {
+      "name": "enable_telematics_sim",
+      "note": "When true, the pipeline runs nb_04_simulate_telematics.",
+      "type": "Boolean",
+      "value": "false"
+    }
+  ]
+}

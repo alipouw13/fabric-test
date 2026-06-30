@@ -1,0 +1,12 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+
+ref table dim_customer
+ref table dim_agent
+ref table dim_policy
+ref table dim_coverage
+ref table dim_date
+ref table fact_claim
+ref table fact_premium

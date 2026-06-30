@@ -1,0 +1,63 @@
+table dim_customer
+
+	column customer_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: customer_id
+
+	column first_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: first_name
+
+	column last_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: last_name
+
+	column email
+		dataType: string
+		summarizeBy: none
+		sourceColumn: email
+
+	column gender
+		dataType: string
+		summarizeBy: none
+		sourceColumn: gender
+
+	column city
+		dataType: string
+		summarizeBy: none
+		sourceColumn: city
+
+	column state
+		dataType: string
+		summarizeBy: none
+		sourceColumn: state
+
+	column postal_code
+		dataType: string
+		summarizeBy: none
+		sourceColumn: postal_code
+
+	column credit_tier
+		dataType: string
+		summarizeBy: none
+		sourceColumn: credit_tier
+
+	column age_years
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: age_years
+
+	column tenure_years
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: tenure_years
+
+	partition dim_customer = entity
+		mode: directLake
+		source
+			entityName: dim_customer
+			schemaName: gold
+			expressionSource: DL_Insurance

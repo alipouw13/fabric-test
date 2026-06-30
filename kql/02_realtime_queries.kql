@@ -1,0 +1,34 @@
+// ============================================================================
+// 02_realtime_queries.kql — demo KQL for the Contoso Insurance real-time story
+// Run these against kqldb_insurance_realtime after nb_04 streams telematics
+// and/or the es_telematics Eventstream is started.
+// ============================================================================
+
+// 1) High-risk drivers in the last hour (usage-based-insurance signal)
+DriverRiskScore(1h)
+| where RiskBand == "High"
+| take 50
+
+// 2) Live fleet — most recent ping per device
+LatestByDevice
+| project DeviceId, PolicyId, EventTime, SpeedMph, Latitude, Longitude
+| take 100
+
+// 3) Speeding events per policy (rolling 15 min)
+VehicleTelematics
+| where EventTime > ago(15m)
+| where SpeedMph > 75
+| summarize SpeedingEvents = count(), MaxSpeed = max(SpeedMph) by PolicyId
+| top 25 by SpeedingEvents desc
+
+// 4) Event volume trend (1-minute bins) — proves data is flowing
+VehicleTelematics
+| where EventTime > ago(1h)
+| summarize Events = count() by bin(EventTime, 1m)
+| order by EventTime asc
+
+// 5) Streaming sample feed landed by the es_telematics Eventstream
+TelematicsStreamRaw
+| summarize Events = count() by bin(Timestamp, 1m)
+| order by Timestamp desc
+| take 30

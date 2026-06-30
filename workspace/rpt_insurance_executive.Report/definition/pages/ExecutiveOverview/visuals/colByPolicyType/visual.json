@@ -1,0 +1,62 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "colByPolicyType",
+  "position": { "x": 24, "y": 172, "z": 3, "width": 608, "height": 300, "tabOrder": 3 },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": { "SourceRef": { "Entity": "dim_coverage" } },
+                  "Property": "policy_type"
+                }
+              },
+              "queryRef": "dim_coverage.policy_type",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": { "SourceRef": { "Entity": "fact_claim" } },
+                  "Property": "Net Incurred"
+                }
+              },
+              "queryRef": "fact_claim.Net Incurred"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": { "SourceRef": { "Entity": "fact_premium" } },
+                  "Property": "Earned Premium"
+                }
+              },
+              "queryRef": "fact_premium.Earned Premium"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": { "SourceRef": { "Entity": "fact_claim" } },
+                "Property": "Net Incurred"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

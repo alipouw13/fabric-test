@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "VariableLibrary",
+    "displayName": "vl_insurance_config",
+    "description": "Central dev/test/prod configuration for the Contoso Insurance platform."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "11111111-1111-1111-1111-000000000050"
+  }
+}

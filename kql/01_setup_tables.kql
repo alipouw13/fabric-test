@@ -1,0 +1,40 @@
+// ============================================================================
+// 01_setup_tables.kql — run in the kqldb_insurance_realtime KQL queryset
+// Mirrors DatabaseSchema.kql so you can (re)create the schema manually if needed.
+// ============================================================================
+
+.create-merge table VehicleTelematics (
+    DeviceId: string,
+    PolicyId: string,
+    EventTime: datetime,
+    SpeedMph: real,
+    HarshBrake: bool,
+    HarshAccel: bool,
+    Latitude: real,
+    Longitude: real,
+    TripMiles: real
+)
+
+.create-merge table TelematicsStreamRaw (
+    Timestamp: datetime,
+    BusId: string,
+    Latitude: real,
+    Longitude: real,
+    Properties: dynamic
+)
+
+.create-or-alter function DriverRiskScore(window: timespan = 1h) {
+    VehicleTelematics
+    | where EventTime > ago(window)
+    | summarize
+        Events = count(),
+        HarshBrakes = countif(HarshBrake == true),
+        HarshAccels = countif(HarshAccel == true),
+        Speeding = countif(SpeedMph > 75),
+        AvgSpeed = round(avg(SpeedMph), 1),
+        Miles = round(sum(TripMiles), 1)
+      by PolicyId
+    | extend RiskPoints = (HarshBrakes * 3) + (HarshAccels * 2) + (Speeding * 2)
+    | extend RiskBand = case(RiskPoints >= 25, "High", RiskPoints >= 10, "Medium", "Low")
+    | order by RiskPoints desc
+}

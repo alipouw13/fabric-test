@@ -1,0 +1,61 @@
+name: Deploy Fabric (Contoso Insurance)
+
+# Continuous deployment of the Contoso Insurance Fabric workspace via fabric-cicd.
+#
+#   * push to main            -> auto-deploys to the "dev" environment
+#   * manual workflow_dispatch -> pick dev / test / prod (gated by GitHub Environments)
+#
+# Required configuration (Settings -> Environments -> dev | test | prod):
+#   Variables : FABRIC_WORKSPACE_ID   (target workspace GUID per environment)
+#   Secrets   : AZURE_CLIENT_ID, AZURE_TENANT_ID  (federated/OIDC service principal)
+# The service principal must be added as an Admin/Member of each target workspace
+# and have the Fabric/Power BI APIs enabled for service principals.
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        type: choice
+        options: [dev, test, prod]
+        default: dev
+  push:
+    branches: [main]
+    paths:
+      - "workspace/**"
+      - "deploy/**"
+      - ".github/workflows/deploy-fabric.yml"
+
+permissions:
+  id-token: write # required for azure/login OIDC
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'dev' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r deploy/requirements.txt
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: Deploy to Fabric
+        run: >
+          python deploy/deploy.py
+          --environment ${{ github.event.inputs.environment || 'dev' }}
+          --workspace-id ${{ vars.FABRIC_WORKSPACE_ID }}
+          --credential cli

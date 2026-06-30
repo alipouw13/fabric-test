@@ -1,0 +1,65 @@
+table dim_policy
+
+	column policy_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: policy_id
+
+	column customer_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: customer_id
+
+	column agent_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: agent_id
+
+	column policy_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: policy_type
+
+	column product
+		dataType: string
+		summarizeBy: none
+		sourceColumn: product
+
+	column term_months
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: term_months
+
+	column status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: status
+
+	column is_active
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: is_active
+
+	column annual_premium
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: annual_premium
+
+	column deductible
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: deductible
+
+	column coverage_limit
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: coverage_limit
+
+	partition dim_policy = entity
+		mode: directLake
+		source
+			entityName: dim_policy
+			schemaName: gold
+			expressionSource: DL_Insurance

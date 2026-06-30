@@ -1,0 +1,53 @@
+// ============================================================================
+// DatabaseSchema.kql — kqldb_insurance_realtime
+// Real-time schema for Contoso Insurance usage-based-insurance (UBI) telematics.
+// Applied automatically when the KQL database is deployed.
+// ============================================================================
+
+// --- Live vehicle telematics (populated by nb_04_simulate_telematics) --------
+.create-merge table VehicleTelematics (
+    DeviceId: string,
+    PolicyId: string,
+    EventTime: datetime,
+    SpeedMph: real,
+    HarshBrake: bool,
+    HarshAccel: bool,
+    Latitude: real,
+    Longitude: real,
+    TripMiles: real
+)
+
+.alter table VehicleTelematics policy retention "{\"SoftDeletePeriod\":\"365.00:00:00\",\"Recoverability\":\"Enabled\"}"
+
+// --- Landing table for the es_telematics Eventstream (SampleData feed) --------
+// The Eventstream destination creates / appends to this table at runtime.
+.create-merge table TelematicsStreamRaw (
+    Timestamp: datetime,
+    BusId: string,
+    Latitude: real,
+    Longitude: real,
+    Properties: dynamic
+)
+
+// --- Driver risk scoring function (harsh events + speeding per policy) --------
+.create-or-alter function DriverRiskScore(window: timespan = 1h) {
+    VehicleTelematics
+    | where EventTime > ago(window)
+    | summarize
+        Events = count(),
+        HarshBrakes = countif(HarshBrake == true),
+        HarshAccels = countif(HarshAccel == true),
+        Speeding = countif(SpeedMph > 75),
+        AvgSpeed = round(avg(SpeedMph), 1),
+        Miles = round(sum(TripMiles), 1)
+      by PolicyId
+    | extend RiskPoints = (HarshBrakes * 3) + (HarshAccels * 2) + (Speeding * 2)
+    | extend RiskBand = case(RiskPoints >= 25, "High", RiskPoints >= 10, "Medium", "Low")
+    | order by RiskPoints desc
+}
+
+// --- Materialized view: latest event per device (live fleet position) --------
+.create materialized-view with (backfill = true) LatestByDevice on table VehicleTelematics {
+    VehicleTelematics
+    | summarize arg_max(EventTime, *) by DeviceId
+}

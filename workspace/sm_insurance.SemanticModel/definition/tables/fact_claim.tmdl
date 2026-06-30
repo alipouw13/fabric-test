@@ -1,0 +1,121 @@
+table fact_claim
+
+	/// Number of claims in context.
+	measure 'Claim Count' = COUNTROWS(fact_claim)
+		formatString: #,##0
+
+	/// Net incurred losses (paid, excluding denied).
+	measure 'Net Incurred' = SUM(fact_claim[net_incurred])
+		formatString: \$#,##0
+
+	measure 'Paid Losses' = SUM(fact_claim[paid_amount])
+		formatString: \$#,##0
+
+	measure 'Reported Losses' = SUM(fact_claim[reported_amount])
+		formatString: \$#,##0
+
+	/// Average net incurred per claim.
+	measure 'Avg Claim Severity' = DIVIDE([Net Incurred], [Claim Count])
+		formatString: \$#,##0
+
+	measure 'Fraud Claims' = CALCULATE([Claim Count], fact_claim[fraud_flag] = TRUE())
+		formatString: #,##0
+
+	measure 'Fraud Rate' = DIVIDE([Fraud Claims], [Claim Count])
+		formatString: 0.0%
+
+	measure 'Catastrophe Claims' = CALCULATE([Claim Count], fact_claim[catastrophe_flag] = TRUE())
+		formatString: #,##0
+
+	/// Net incurred losses divided by earned premium.
+	measure 'Loss Ratio' = DIVIDE([Net Incurred], [Earned Premium])
+		formatString: 0.0%
+
+	column claim_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: claim_id
+
+	column policy_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: policy_id
+
+	column customer_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: customer_id
+
+	column agent_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: agent_id
+
+	column policy_type
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: policy_type
+
+	column date_key
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column claim_date
+		dataType: dateTime
+		formatString: Long Date
+		summarizeBy: none
+		sourceColumn: claim_date
+
+	column loss_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: loss_type
+
+	column claim_status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: claim_status
+
+	column severity_band
+		dataType: string
+		summarizeBy: none
+		sourceColumn: severity_band
+
+	column reported_amount
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: reported_amount
+
+	column paid_amount
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: paid_amount
+
+	column net_incurred
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: net_incurred
+
+	column fraud_flag
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: fraud_flag
+
+	column catastrophe_flag
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: catastrophe_flag
+
+	partition fact_claim = entity
+		mode: directLake
+		source
+			entityName: fact_claim
+			schemaName: gold
+			expressionSource: DL_Insurance
