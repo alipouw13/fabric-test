@@ -29,7 +29,7 @@
       "name": "enable_telematics_sim",
       "note": "When true, the pipeline runs nb_04_simulate_telematics.",
       "type": "Boolean",
-      "value": "false"
+      "value": false
     }
   ]
 }

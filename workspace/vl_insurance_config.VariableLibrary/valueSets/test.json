@@ -3,6 +3,6 @@
   "name": "test",
   "variableOverrides": [
     { "name": "environment", "value": "test" },
-    { "name": "enable_telematics_sim", "value": "false" }
+    { "name": "enable_telematics_sim", "value": false }
   ]
 }

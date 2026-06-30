@@ -3,6 +3,6 @@
   "name": "prod",
   "variableOverrides": [
     { "name": "environment", "value": "prod" },
-    { "name": "enable_telematics_sim", "value": "false" }
+    { "name": "enable_telematics_sim", "value": false }
   ]
 }
