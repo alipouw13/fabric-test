@@ -47,7 +47,7 @@
 }
 
 // --- Materialized view: latest event per device (live fleet position) --------
-.create materialized-view with (backfill = true) LatestByDevice on table VehicleTelematics {
+.create-or-alter materialized-view with (backfill = true) LatestByDevice on table VehicleTelematics {
     VehicleTelematics
     | summarize arg_max(EventTime, *) by DeviceId
 }
