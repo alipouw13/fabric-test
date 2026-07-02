@@ -71,13 +71,16 @@ find_replace:
 
   # --- sm_insurance: repoint the Direct Lake OneLake source at the target workspace
   #     + the deployed lh_insurance lakehouse (see definition/expressions.tmdl).
-  - find_value: "PLACEHOLDER_WORKSPACE_ID"
+  #     The committed baseline is the DEV workspace/lakehouse GUID pair (required so
+  #     Fabric Git integration materializes a valid Direct Lake model); fabric-cicd
+  #     rewrites them to the target for test/prod. Deploying to DEV is a self no-op.
+  - find_value: "4c4fde4b-5d6e-4d55-964f-5c454b9fe7b8"
     replace_value:
       _ALL_: "$workspace.$id"
     item_type: "SemanticModel"
     item_name: "sm_insurance"
 
-  - find_value: "PLACEHOLDER_LAKEHOUSE_ID"
+  - find_value: "43c439b1-d031-4a28-be9c-db42f6037011"
     replace_value:
       _ALL_: "$items.Lakehouse.lh_insurance.$id"
     item_type: "SemanticModel"

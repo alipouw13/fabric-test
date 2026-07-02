@@ -1,8 +1,11 @@
 /// Direct Lake (OneLake) source for the lh_insurance gold layer.
-/// The OneLake workspace and lakehouse GUIDs are find-replaced per environment
-/// by fabric-cicd (see deploy/parameter.yml) — never hardcode real GUIDs here.
+/// Committed value = the DEV workspace + lh_insurance lakehouse GUIDs. Fabric Git
+/// integration materializes this M expression verbatim (it does NOT run parameter.yml),
+/// so the OneLake path must be a concrete, valid workspace/lakehouse GUID pair.
+/// fabric-cicd re-points these DEV GUIDs to the target workspace + lakehouse for
+/// test/prod promotion (see workspace/parameter.yml).
 expression DL_Insurance =
 		let
-			Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/PLACEHOLDER_WORKSPACE_ID/PLACEHOLDER_LAKEHOUSE_ID", [HierarchicalNavigation = true])
+			Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/4c4fde4b-5d6e-4d55-964f-5c454b9fe7b8/43c439b1-d031-4a28-be9c-db42f6037011", [HierarchicalNavigation = true])
 		in
 			Source
